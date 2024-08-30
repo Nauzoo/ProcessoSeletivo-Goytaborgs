@@ -20,6 +20,9 @@
 
 ## Instalação das dependências:
 - Ambas as dependeências podem ser baixadas pelo arduino IDE no gerenciador de nucleos e no gerenciador de bibliotecas respectivamente
+
+<br>
+
 - Para arduino CLI:
   - Inincialize um arquivo de configuraçao: `$ arduino-cli config init`
   - Atualize o cache de plataformas: `$ arduino-cli core update-index`
