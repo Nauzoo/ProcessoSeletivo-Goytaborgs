@@ -88,8 +88,10 @@ struct DirectionCore{
       Engines::rightEngineSpin(0, pin_right_speed);
     }
     else {
-      Engines::leftEngineSpin(pin_left_speed, pin_right_speed);
-      Engines::rightEngineSpin(pin_right_speed, pin_left_speed);
+      if (pin_left_speed == 0 || pin_right_speed == 0){         // Necessario para n fazer o robo girar infinitamente
+        Engines::leftEngineSpin(pin_left_speed, pin_right_speed);
+        Engines::rightEngineSpin(pin_right_speed, pin_left_speed);
+      }
     }
   }
 };
