@@ -1,0 +1,8 @@
+[COMPLETO] Escrever o codigo para movimentar o robo.
+[COMPLETO] Escrever o codigo para ativar/desativar a arma.
+[COMPLETO] Escrever o codigo para desligar a arma e os motores em caso de perda de conexao.
+[COMPLETO] Otimizar a quantidade de "ifs" no código.
+    [TODO] Atualizar o README com informações do hardware.
+    [TODO] Atualizar o README com informações da carcaça.
+    [TODO] Adicionar todos os particpantes do grupo e suas redes sociais.
+
