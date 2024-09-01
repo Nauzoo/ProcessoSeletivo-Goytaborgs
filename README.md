@@ -1,7 +1,7 @@
 <div>
-
+  
   # ProcessoSeletivo-Goytaborgs <img align="left" alt="Java" width="80px" style="padding-right:10px;" src="assets/logo.png" />
-
+  
 </div>
 
 <br>
@@ -12,7 +12,7 @@
 - Microcontrolador: `ESP32 DevKit`
 - Ponte H (motor driver): `MX1508`
 - 3 motores com caixa de redução
-- Armadura em MDF 3mm
+- Armadura em MDF 3mm 
 
 ## Software:
 A programação desse sistema foi construida dentro do Ambiente do [PlataformIO](https://docs.platformio.org/en/latest/integration/ide/pioide.html).
@@ -52,17 +52,3 @@ Caso queira adicionar um núclio de terceiros:
 <br>
 
 Após instalar todas as dependências, clone o repositório `$git clone https://github.com/Nauzoo/ProcessoSeletivo-Goytaborgs.git` e abra utilizando o PlataformIO ou copie o cógico `source/src/main.cpp` para seu IDE de preferência (não se esqueça de alterar a extenão .cpp para .ino caso necessário).
-
----
-
-##Armadura:
-A carcaça do robô deve ser cortada em mdf 3mm. Foram atribuidas elevações, também em mdf 3mm, nas partes superior e inferior dianteira afim de assistir suporte ao robô caso ele vire de cabça pra baixo ou arraste-se contra o chao. Foram adicionados cortes retangulares para melhor fixação das partes, que devem ser coladas entre sí com super cola.
-
-![robo](assets/robo.jpeg)
-
-- (Design inspirado em um réptil, apenas porque é legal. ¯\_(ツ)_/¯)
-
-<br>
-
-- Para abrir o arquivo contendo o modelo 3D do projeto (`shell/tribo azul v1.f3d`), é necess�rio instalar o software [Autodesk Fusion](https://www.autodesk.com/products/fusion-360/free-trial).
-![roboView](assets/robo.gif)
