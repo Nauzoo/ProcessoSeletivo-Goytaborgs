@@ -3,6 +3,18 @@
 #include <Arduino.h>
 #include <DabbleESP32.h>
 
+/* SESSÃO DEBUGGER, Ative o debugger trocando valor de DEBUG para 1
+  Mante-lo desligado é uma medida de otimização importante pois Serial.println 
+  gasta mtos recuros de processamento*/
+
+#define DEBUG 1
+
+#if DEBUG == 1
+#define debugNotify(message) Serial.println(x)
+#else
+#define debugNotify(message)
+#endif
+
 
 /* Definicao dos pinos PWM para o controle de cada um dos motores; */
 // PS: Os valores dos pinos poderam ser alterados dps;
@@ -17,10 +29,10 @@
 #define SPIN_FULL_INTENSITY 255
 #define SPIN_HALF_INTENSITY 127
 
-const int right_engine_channel_a = 0; // canal de PWM, desse modo é possivel controlar o GPIO com facilidade
-const int right_engine_channel_b = 1;
-const int left_engine_channel_a = 2;
-const int left_engine_channel_b = 3;
+const u_int8_t right_engine_channel_a = 0; // canal de PWM, por eles é possivel controlar a intensiade do sinal
+const u_int8_t right_engine_channel_b = 1; // não vamos gastar mais memoria do que o necessário. Use u_int8_t.
+const u_int8_t left_engine_channel_a = 2;
+const u_int8_t left_engine_channel_b = 3;
 
 const int PWM_freq = 1000;            // 1Khz  
 const int PWM_res = 8;                // 8bits (0-255)
@@ -35,12 +47,12 @@ struct Weapon
       state = true;
     }
 
-    static void turnWeaponOff(){
+    static void turnWeaponOff(){ 
       digitalWrite(WEAPON_ACTIVATOR, LOW);
       state = false;
     }
 
-    static void togleWeapon(){
+    static void togleWeapon(){ 
       state ? turnWeaponOff() : turnWeaponOn();
     }
 
@@ -58,7 +70,7 @@ struct Engines
       HIGH   |  HIGH   | STATIC
   */
   public:
-  static void leftEngineSpin(u_int8_t foward, u_int8_t backwards) {
+  static void leftEngineSpin(u_int8_t foward, u_int8_t backwards) {   //Maldade do Zanella: "usar ledcWrite no lugar de analogWrite"
     ledcWrite(LEFT_ENGINE_A, foward);
     ledcWrite(LEFT_ENGINE_B, backwards);
   }
@@ -69,12 +81,12 @@ struct Engines
   
 };
 
-struct DirectionCore{
+struct InputsReciver{
 
   public:
-  static void move(){
+  static void readMovement(){
 
-    // Otimizações para reduzir a quantidade de condicionais
+    // Otimizações(Ofuscamentos >:))para reduzir a quantidade de condicionais
 
     u_int8_t pin_left_speed = GamePad.isSquarePressed() ? 0 : SPIN_FULL_INTENSITY;
     u_int8_t pin_right_speed = GamePad.isCirclePressed() ? 0 : SPIN_FULL_INTENSITY;
@@ -86,22 +98,34 @@ struct DirectionCore{
     else if (GamePad.isDownPressed()){
       Engines::leftEngineSpin(0, pin_left_speed);
       Engines::rightEngineSpin(0, pin_right_speed);
-    }
-    else {
-      if (pin_left_speed == 0 || pin_right_speed == 0){         // Necessario para n fazer o robo girar infinitamente
-        Engines::leftEngineSpin(pin_left_speed, pin_right_speed);
-        Engines::rightEngineSpin(pin_right_speed, pin_left_speed);
-      }
+    } 
+    else if(pin_left_speed - pin_right_speed != 0){
+      Engines::leftEngineSpin(pin_left_speed, pin_right_speed);
+      Engines::rightEngineSpin(pin_right_speed, pin_left_speed);
     }
   }
+  
+  static bool lastStartRead;
+  static void readWeapon(){
+    if (!GamePad.isStartPressed() && lastStartRead){
+      Weapon::togleWeapon();
+    }
+    InputsReciver::lastStartRead = GamePad.isStartPressed();
+  }
 };
+bool InputsReciver::lastStartRead = false;
+
+void panic(){
+  Weapon::turnWeaponOff();
+  Engines::leftEngineSpin(0, 0);
+  Engines::rightEngineSpin(0, 0);
+}
 
 
 void setup() {
   // CONFIGURANDO OS PINOS PARA A SAIDA DE DADOS;
-
   pinMode(WEAPON_ACTIVATOR, OUTPUT);
-  Weapon::turnWeaponOff();          // iniciando com a arma desligada.
+  Weapon::turnWeaponOff();                // iniciando com a arma desligada.
 
   ledcSetup(right_engine_channel_a, PWM_freq, PWM_res);
   ledcSetup(right_engine_channel_b, PWM_freq, PWM_res);
@@ -113,7 +137,7 @@ void setup() {
   ledcAttachPin(LEFT_ENGINE_A, left_engine_channel_a);
   ledcAttachPin(LEFT_ENGINE_B, left_engine_channel_b);
 
-  Serial.begin(115200);                   // Iniciando o monitor serial para debugging
+  Serial.begin(115200);                   // Inicie o monitor serial para debugging
   Dabble.begin("ROBOT_NAME_IS_A_SECRET"); // Definindo o nome do bluetooth
 
 }
@@ -122,18 +146,9 @@ void loop() {
   Dabble.processInput();              // verifica a cada ciclo se há novos inputs do controle
   
   if (!Dabble.isAppConnected()){      // Deliga todo o sistema caso o app seja desconectado
-    Weapon::turnWeaponOff();
-    Engines::leftEngineSpin(0, 0);
-    Engines::rightEngineSpin(0, 0);
+    panic();
   }
-
-  if (GamePad.isStartPressed()){
-    Weapon::togleWeapon();
-    delay(100);                     // solução temporaria, pode ser mudada para um "isTriangleReleased"
-  }
-
-  // Joystick não é uma boa opçao pq n há um meio de caucular precisamente a rotação do robo.
-  // Vamos usar o D-Pad ao invés disso.
-  DirectionCore::move();
-
+  // Struct com as Funções que respondem aos inputs dos usuários
+  InputsReciver::readMovement();
+  InputsReciver::readWeapon();        // Ativa a arma apenas quando o botão de Start é solto.
 }
