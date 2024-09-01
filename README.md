@@ -24,7 +24,7 @@ Sinta-se a vontade para utilizar qualquer outro IDE que preferir, basta somente 
 
 #### Dependencias:
 No projeto foi utilizada a biblioteca [DabbleESP32](https://github.com/STEMpedia/DabbleESP32) para fazer a comunicação bluetooth entre o celular e o micro-controlador.
-É necessário instalar o pacote de desenvolvimento para ESP32 no seguinte dentro de seu IDE. Tanto no PlataforIO quanto no Arduino IDE é possível encontrar os downloads no gerenciador de pacotes.
+É necessário instalar o pacote de desenvolvimento para ESP32 dentro de seu IDE. Tanto no PlataforIO quanto no Arduino IDE é possível encontrar os downloads no gerenciador de pacotes.
 
 Caso queira adicionar um núclio de terceiros:
 - ESP32 core para arduino: [EspCore](https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json)
@@ -35,10 +35,8 @@ Caso queira adicionar um núclio de terceiros:
 - Ambas as dependências podem ser baixadas no gerenciador de pacotes do PlataformIO e do arduino IDE
 ![boardInstall](assets/boardInstall.png)
 ![boardInstall](assets/boardInstall2.png)
-
-Selecione a opção que abrange sua placa. No caso desse projeto, utilizamos a `DOIT ESP32 DEVKIT v1`
-
 ![libInstall](assets/libInstall.png)
+- **Selecione a opção que abrange sua placa. No caso desse projeto, utilizamos a `DOIT ESP32 DEVKIT v1`**
 
 <br>
 
