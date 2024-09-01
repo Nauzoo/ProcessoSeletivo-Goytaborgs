@@ -33,7 +33,7 @@ Caso queira adicionar um núclio de terceiros:
 
 #### Instalação das dependências:
 - Ambas as dependências podem ser baixadas no gerenciador de pacotes do PlataformIO e do arduino IDE
-![boardInstall](assets/boardInstall1.png)
+![boardInstall](assets/boardInstall.png)
 ![boardInstall](assets/boardInstall2.png)
 
 Selecione a opção que abrange sua placa. No caso desse projeto, utilizamos a `DOIT ESP32 DEVKIT v1`
