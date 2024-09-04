@@ -4,7 +4,7 @@
 #include <DabbleESP32.h>
 
 /* SESSÃO DEBUGGER, Ative o debugger trocando valor de DEBUG para 1
-  Mante-lo desligado é uma medida de otimização importante pois Serial.println 
+  Mante-lo desligado é uma medida de otimização importante pois Serial.println
   gasta mtos recuros de processamento*/
 
 #define DEBUG 1
@@ -34,25 +34,25 @@ const u_int8_t right_engine_channel_b = 1; // não vamos gastar mais memoria do 
 const u_int8_t left_engine_channel_a = 2;
 const u_int8_t left_engine_channel_b = 3;
 
-const int PWM_freq = 1000;            // 1Khz  
+const int PWM_freq = 1000;            // 1Khz
 const int PWM_res = 8;                // 8bits (0-255)
 
 struct Weapon
 {
   public:
     static bool state;
-    
+
     static void turnWeaponOn() {
       digitalWrite(WEAPON_ACTIVATOR, HIGH);
       state = true;
     }
 
-    static void turnWeaponOff(){ 
+    static void turnWeaponOff(){
       digitalWrite(WEAPON_ACTIVATOR, LOW);
       state = false;
     }
 
-    static void togleWeapon(){ 
+    static void togleWeapon(){
       state ? turnWeaponOff() : turnWeaponOn();
     }
 
@@ -62,8 +62,8 @@ bool Weapon::state = false;
 struct Engines
 {
   /*  PONTE H MX1508 VALORES
-     IN1/IN3 | IN2/IN4 | DIR  
-      
+     IN1/IN3 | IN2/IN4 | DIR
+
       LOW    |  LOW    | STANDBY
       PWM    |  LOW    | FOWARD
       LOW    |  PWM    | REVERSE
@@ -78,7 +78,7 @@ struct Engines
     ledcWrite(RIGHT_ENGINE_A, foward);
     ledcWrite(RIGHT_ENGINE_B, backwards);
   }
-  
+
 };
 
 struct InputsReciver{
@@ -98,13 +98,17 @@ struct InputsReciver{
     else if (GamePad.isDownPressed()){
       Engines::leftEngineSpin(0, pin_left_speed);
       Engines::rightEngineSpin(0, pin_right_speed);
-    } 
+    }
     else if(pin_left_speed - pin_right_speed != 0){
       Engines::leftEngineSpin(pin_left_speed, pin_right_speed);
       Engines::rightEngineSpin(pin_right_speed, pin_left_speed);
     }
+    else {
+        Engines::leftEngineSpin(0, 0);
+        Engines::rightEngineSpin(0, 0);
+    }
   }
-  
+
   static bool lastStartRead;
   static void readWeapon(){
     if (!GamePad.isStartPressed() && lastStartRead){
@@ -144,7 +148,7 @@ void setup() {
 
 void loop() {
   Dabble.processInput();              // verifica a cada ciclo se há novos inputs do controle
-  
+
   if (!Dabble.isAppConnected()){      // Deliga todo o sistema caso o app seja desconectado
     panic();
   }
