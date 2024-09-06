@@ -68,15 +68,17 @@ struct Engines
       PWM    |  LOW    | FOWARD
       LOW    |  PWM    | REVERSE
       HIGH   |  HIGH   | STATIC
+
   */
+
   public:
   static void leftEngineSpin(u_int8_t foward, u_int8_t backwards) {   //Maldade do Zanella: "usar ledcWrite no lugar de analogWrite"
-    ledcWrite(LEFT_ENGINE_A, foward);
-    ledcWrite(LEFT_ENGINE_B, backwards);
+    ledcWrite(left_engine_channel_a, foward);
+    ledcWrite(left_engine_channel_b, backwards);
   }
   static void rightEngineSpin(u_int8_t foward, u_int8_t backwards) {
-    ledcWrite(RIGHT_ENGINE_A, foward);
-    ledcWrite(RIGHT_ENGINE_B, backwards);
+    ledcWrite(right_engine_channel_a, foward);
+    ledcWrite(right_engine_channel_b, backwards);
   }
 
 };
